@@ -1,7 +1,15 @@
-# Repository Introduction
+# Temple API
 
-This repository contains a collection of code for students that take the CSE 341 course at Brigham Young University - Idaho.
+This API is intended for a team assignment in CSE 341 to learn how to use Swagger for API Documentation.
 
-## How to use this repository
+## Instructions to run application
 
-Each branch contains a collection of code for a given assignment or class activity. Select a branch, and then either clone, fork, or download the zip file to access the files on your computer.
+- Run npm install in the terminal
+- npm start
+
+## Things to look out for
+
+- Examine the routes and try a couple with your rest client.
+- If you try to run it, you'll get an authentication error from MongoDB.
+- Modify your .env file to include your mongoDB username and your db password.
+- Import the temples.json file into your mongoDB database in a new collection called temples.
