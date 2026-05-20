@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: temple-api
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: npm start
+    envVars: []
+    repo: 
+      name: your-github-username/your-repo-name
+      branch: main
