@@ -12,7 +12,7 @@ module.exports = (mongoose) => {
         history: String,
         additionalInfo: Boolean,
       },
-      { timestamps: true }
+      { timestamps: true, strict: false }
     )
   );
 

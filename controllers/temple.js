@@ -56,7 +56,7 @@ exports.create = async (req, res) => {
 
 exports.findAll = async (req, res) => {
   try {
-    const data = await Temple.find({});
+    const data = await Temple.find({}).lean();
     res.send(data);
   } catch (err) {
     res.status(500).send({ message: err.message || 'Some error occurred while retrieving temples.' });
@@ -66,7 +66,7 @@ exports.findAll = async (req, res) => {
 exports.findOne = async (req, res) => {
   try {
     const temple_id = Number(req.params.temple_id);
-    const data = await Temple.findOne({ temple_id });
+    const data = await Temple.findOne({ temple_id }).lean();
     if (!data) {
       return res.status(404).send({ message: `Temple not found with id ${temple_id}` });
     }
