@@ -6,6 +6,6 @@ services:
     buildCommand: npm install
     startCommand: npm start
     envVars: []
-    repo: 
-      name: your-github-username/your-repo-name
+    repo:
+      name: myrayzsiza/cse341-projects
       branch: main
