@@ -1,15 +1,31 @@
 # Temple API
 
-This API is intended for a team assignment in CSE 341 to learn how to use Swagger for API Documentation.
+This API implements two collections (`temples` and `reviews`) with full CRUD operations, validation, error handling, and Swagger documentation.
 
 ## Instructions to run application
 
-- Run npm install in the terminal
-- npm start
+- Run `npm install`
+- Create a `.env` file with a valid `MONGODB_URI`
+- Run `npm start`
+- Open `http://localhost:8080/api-docs` to view Swagger UI
 
-## Things to look out for
+## API collections
 
-- Examine the routes and try a couple with your rest client.
-- If you try to run it, you'll get an authentication error from MongoDB.
-- Modify your .env file to include your mongoDB username and your db password.
-- Import the temples.json file into your mongoDB database in a new collection called temples.
+- `temples` supports GET, POST, PUT, DELETE
+- `reviews` supports GET, POST, PUT, DELETE
+
+## Notes
+
+- `.env` is ignored by git via `.gitignore`
+- Swagger docs are generated with `npm run swagger`
+- Use the API root for collection endpoints:
+  - `GET /temples`
+  - `POST /temples`
+  - `GET /temples/:temple_id`
+  - `PUT /temples/:temple_id`
+  - `DELETE /temples/:temple_id`
+  - `GET /reviews`
+  - `POST /reviews`
+  - `GET /reviews/:review_id`
+  - `PUT /reviews/:review_id`
+  - `DELETE /reviews/:review_id`

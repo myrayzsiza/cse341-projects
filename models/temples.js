@@ -7,6 +7,9 @@ module.exports = (mongoose) => {
         name: String,
         location: String,
         dedicated: String,
+        region: String,
+        country: String,
+        history: String,
         additionalInfo: Boolean,
       },
       { timestamps: true }

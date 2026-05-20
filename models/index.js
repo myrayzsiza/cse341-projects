@@ -7,5 +7,6 @@ const db = {};
 db.mongoose = mongoose;
 db.url = dbConfig.url;
 db.temples = require('./temples.js')(mongoose);
+db.reviews = require('./reviews.js')(mongoose);
 
 module.exports = db;
