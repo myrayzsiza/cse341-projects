@@ -35,15 +35,27 @@ async function run() {
 
     const Temple = mongoose.model('temples', TempleSchema);
 
+    const extractCountry = (location) => {
+      if (!location || typeof location !== 'string') return undefined;
+      const parts = location.split(',').map((p) => p.trim()).filter(Boolean);
+      if (parts.length === 0) return undefined;
+      const last = parts[parts.length - 1];
+      if (last.toLowerCase().includes('location not available') || last.toLowerCase().includes('announced')) {
+        return undefined;
+      }
+      return last;
+    };
+
     // Normalize and insert (upsert by temple_id)
     for (const item of templesJson) {
+      const inferredCountry = extractCountry(item.location || item.name || '');
       const doc = {
         temple_id: Number(item.temple_id) || Number(item.id) || undefined,
         name: item.name || item.title || '',
         location: item.location || '',
         dedicated: item.dedicated || '',
         region: item.region || item.state || '',
-        country: item.country || 'Unknown',
+        country: item.country || inferredCountry || 'Unknown',
         history: item.history || '',
         additionalInfo: item.additionalInfo ?? false,
       };
