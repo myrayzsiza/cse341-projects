@@ -5,8 +5,16 @@ const review = require('./review');
 routes.use('/', require('./swagger'));
 routes.use('/temples', temple);
 routes.use('/reviews', review);
-routes.use('/', (req, res) => {
-  res.send({ documentationURL: 'https://nathanbirch.github.io/nathan-byui-api-docs' });
+routes.get('/', (req, res) => {
+  res.send({
+    message: 'Welcome to the Temple API',
+    version: '1.0.0',
+    routes: {
+      documentation: '/api-docs',
+      temples: '/temples',
+      reviews: '/reviews',
+    },
+  });
 });
 
 module.exports = routes;
