@@ -5,8 +5,7 @@ const doc = {
     title: 'Temple API',
     description: 'CRUD API for temples and reviews with validation and error handling.',
   },
-  host: 'localhost:8080',
-  schemes: ['http'],
+  // Leave host undefined so Swagger UI uses the current origin.
 };
 
 const outputFile = './swagger.json';
