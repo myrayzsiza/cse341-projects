@@ -29,6 +29,34 @@ const validateTemple = (body) => {
   return null;
 };
 
+// Validate fields for update: only validate fields that are present.
+const validateTempleUpdate = (body) => {
+  if (body.temple_id == null || typeof body.temple_id !== 'number' || Number.isNaN(body.temple_id)) {
+    return 'temple_id must be a number.';
+  }
+
+  if (body.name != null && (typeof body.name !== 'string' || body.name.trim() === '')) {
+    return 'name must be a non-empty string when provided.';
+  }
+  if (body.location != null && (typeof body.location !== 'string' || body.location.trim() === '')) {
+    return 'location must be a non-empty string when provided.';
+  }
+  if (body.dedicated != null && (typeof body.dedicated !== 'string' || body.dedicated.trim() === '')) {
+    return 'dedicated must be a non-empty string when provided.';
+  }
+  if (body.region != null && (typeof body.region !== 'string' || body.region.trim() === '')) {
+    return 'region must be a non-empty string when provided.';
+  }
+  if (body.country != null && (typeof body.country !== 'string' || body.country.trim() === '')) {
+    return 'country must be a non-empty string when provided.';
+  }
+  if (body.additionalInfo != null && typeof body.additionalInfo !== 'boolean') {
+    return 'additionalInfo must be a boolean when provided.';
+  }
+
+  return null;
+};
+
 exports.create = async (req, res) => {
   try {
     const validationError = validateTemple(req.body);
@@ -83,16 +111,18 @@ exports.update = async (req, res) => {
     }
 
     const updatePayload = { ...req.body };
-    const validationError = validateTemple({ ...updatePayload, temple_id: Number(req.params.temple_id) });
+    const temple_id = Number(req.params.temple_id);
+
+    // Validate update payload: require temple_id (from params) and validate any provided fields.
+    const validationError = validateTempleUpdate({ ...updatePayload, temple_id });
     if (validationError) {
       return res.status(400).send({ message: validationError });
     }
 
-    const temple_id = Number(req.params.temple_id);
-    const data = await Temple.findOneAndUpdate({ temple_id }, updatePayload, {
-      new: true,
-      useFindAndModify: false,
-    });
+    // Prevent changing the business identifier via the body
+    if (updatePayload.temple_id != null) delete updatePayload.temple_id;
+
+    const data = await Temple.findOneAndUpdate({ temple_id }, updatePayload, { new: true });
 
     if (!data) {
       return res.status(404).send({ message: `Cannot update Temple with id=${temple_id}. Maybe Temple was not found!` });
