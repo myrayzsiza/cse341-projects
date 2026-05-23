@@ -23,6 +23,30 @@ const validateReview = (body) => {
   return null;
 };
 
+// Validate fields for update: only validate fields that are present.
+const validateReviewUpdate = (body) => {
+  if (body.review_id == null || typeof body.review_id !== 'number' || Number.isNaN(body.review_id)) {
+    return 'review_id must be a number.';
+  }
+
+  if (body.temple_id != null && (typeof body.temple_id !== 'number' || Number.isNaN(body.temple_id))) {
+    return 'temple_id must be a number when provided.';
+  }
+  if (body.author != null && (typeof body.author !== 'string' || body.author.trim() === '')) {
+    return 'author must be a non-empty string when provided.';
+  }
+  if (body.comment != null && (typeof body.comment !== 'string' || body.comment.trim() === '')) {
+    return 'comment must be a non-empty string when provided.';
+  }
+  if (body.rating != null && (typeof body.rating !== 'number' || body.rating < 1 || body.rating > 5)) {
+    return 'rating must be a number between 1 and 5 when provided.';
+  }
+  if (body.isPublic != null && typeof body.isPublic !== 'boolean') {
+    return 'isPublic must be a boolean when provided.';
+  }
+  return null;
+};
+
 exports.create = async (req, res) => {
   try {
     const validationError = validateReview(req.body);
@@ -79,16 +103,19 @@ exports.update = async (req, res) => {
       return res.status(400).send({ message: 'Data to update can not be empty!' });
     }
 
-    const validationError = validateReview({ ...req.body, review_id: Number(req.params.review_id) });
+    const updatePayload = { ...req.body };
+    const review_id = Number(req.params.review_id);
+
+    // Validate update payload: require review_id from params and validate any provided fields
+    const validationError = validateReviewUpdate({ ...updatePayload, review_id });
     if (validationError) {
       return res.status(400).send({ message: validationError });
     }
 
-    const review_id = Number(req.params.review_id);
-    const data = await Review.findOneAndUpdate({ review_id }, req.body, {
-      new: true,
-      useFindAndModify: false,
-    });
+    // Prevent changing the business identifier via the body
+    if (updatePayload.review_id != null) delete updatePayload.review_id;
+
+    const data = await Review.findOneAndUpdate({ review_id }, updatePayload, { new: true });
 
     if (!data) {
       return res.status(404).send({ message: `Cannot update review with id=${review_id}. Maybe review was not found!` });
