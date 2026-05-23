@@ -119,6 +119,44 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "example": "New Temple Name"
+                },
+                "location": {
+                  "type": "string",
+                  "example": "New City"
+                },
+                "dedicated": {
+                  "type": "string",
+                  "example": "2026-05-23"
+                },
+                "region": {
+                  "type": "string",
+                  "example": "New Region"
+                },
+                "country": {
+                  "type": "string",
+                  "example": "New Country"
+                },
+                "history": {
+                  "type": "string",
+                  "example": "Updated temple history"
+                },
+                "additionalInfo": {
+                  "type": "boolean",
+                  "example": true
+                }
+              }
+            }
           }
         ],
         "responses": {
@@ -256,6 +294,40 @@
             "in": "path",
             "required": true,
             "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "temple_id": {
+                  "type": "number",
+                  "example": 10
+                },
+                "author": {
+                  "type": "string",
+                  "example": "Jane Doe"
+                },
+                "rating": {
+                  "type": "number",
+                  "example": 5
+                },
+                "comment": {
+                  "type": "string",
+                  "example": "Great temple visit!"
+                },
+                "date": {
+                  "type": "string",
+                  "example": "2026-05-23"
+                },
+                "isPublic": {
+                  "type": "boolean",
+                  "example": true
+                }
+              }
+            }
           }
         ],
         "responses": {
