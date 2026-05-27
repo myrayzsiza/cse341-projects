@@ -6,9 +6,6 @@ const passport = require('passport');
 const GitHubStrategy = require('passport-github').Strategy;
 const app = express();
 
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger.json');
-
 passport.serializeUser((user, done) => {
   done(null, user);
 });
@@ -44,10 +41,15 @@ app
   .use(passport.initialize())
   .use(passport.session())
   .use('/auth', require('./routes/auth'))
-  .use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
   .use('/', require('./routes'));
 
 const db = require('./models');
+
+if (!db.url) {
+  console.error('MONGODB_URI is not set in .env');
+  process.exit(1);
+}
+
 db.mongoose
   .connect(db.url, {
     useNewUrlParser: true,
