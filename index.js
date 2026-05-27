@@ -16,6 +16,10 @@ if (!githubClientID || !githubClientSecret || !githubCallbackURL) {
   process.exit(1);
 }
 
+console.log('GitHub OAuth config:');
+console.log(' - GITHUB_CLIENT_ID set:', Boolean(githubClientID));
+console.log(' - GITHUB_CALLBACK_URL:', githubCallbackURL);
+
 passport.serializeUser((user, done) => {
   done(null, user);
 });
