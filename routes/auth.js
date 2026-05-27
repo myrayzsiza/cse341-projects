@@ -1,7 +1,12 @@
 const router = require('express').Router();
 const passport = require('passport');
 
-router.get('/github', passport.authenticate('github', { scope: ['user:email'] }));
+router.get('/github', (req, res, next) => {
+  console.log('Auth request start:');
+  console.log(' - GitHub client ID set:', Boolean(process.env.GITHUB_CLIENT_ID));
+  console.log(' - GitHub callback URL:', process.env.GITHUB_CALLBACK_URL);
+  next();
+}, passport.authenticate('github', { scope: ['user:email'] }));
 
 router.get(
   '/github/callback',
