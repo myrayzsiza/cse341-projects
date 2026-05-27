@@ -6,6 +6,16 @@ const passport = require('passport');
 const GitHubStrategy = require('passport-github').Strategy;
 const app = express();
 
+const githubClientID = process.env.GITHUB_CLIENT_ID;
+const githubClientSecret = process.env.GITHUB_CLIENT_SECRET;
+const githubCallbackURL = process.env.GITHUB_CALLBACK_URL;
+
+if (!githubClientID || !githubClientSecret || !githubCallbackURL) {
+  console.error('Missing GitHub OAuth environment variables.');
+  console.error('Set GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET, and GITHUB_CALLBACK_URL.');
+  process.exit(1);
+}
+
 passport.serializeUser((user, done) => {
   done(null, user);
 });
@@ -17,9 +27,9 @@ passport.deserializeUser((obj, done) => {
 passport.use(
   new GitHubStrategy(
     {
-      clientID: process.env.GITHUB_CLIENT_ID || '',
-      clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
-      callbackURL: process.env.GITHUB_CALLBACK_URL || 'http://localhost:8080/auth/github/callback',
+      clientID: githubClientID,
+      clientSecret: githubClientSecret,
+      callbackURL: githubCallbackURL,
     },
     (accessToken, refreshToken, profile, done) => {
       return done(null, profile);
