@@ -26,6 +26,8 @@
     "express-session": "^1.19.0",
     "mongoose": "^6.0.14",
     "nodemon": "^2.0.15",
+    "passport": "^0.7.0",
+    "passport-github": "^1.1.0",
     "session": "^0.1.0",
     "swagger-ui-express": "^4.3.0"
   },

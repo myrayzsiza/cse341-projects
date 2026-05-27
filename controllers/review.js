@@ -49,19 +49,24 @@ const validateReviewUpdate = (body) => {
 
 exports.create = async (req, res) => {
   try {
-    const validationError = validateReview(req.body);
+    const reviewPayload = {
+      ...req.body,
+      author: req.user?.username || req.body.author,
+    };
+
+    const validationError = validateReview(reviewPayload);
     if (validationError) {
       return res.status(400).send({ message: validationError });
     }
 
     const review = new Review({
-      review_id: req.body.review_id,
-      temple_id: req.body.temple_id,
-      author: req.body.author,
-      rating: req.body.rating,
-      comment: req.body.comment,
-      date: req.body.date || new Date().toISOString(),
-      isPublic: req.body.isPublic ?? true,
+      review_id: reviewPayload.review_id,
+      temple_id: reviewPayload.temple_id,
+      author: reviewPayload.author,
+      rating: reviewPayload.rating,
+      comment: reviewPayload.comment,
+      date: reviewPayload.date || new Date().toISOString(),
+      isPublic: reviewPayload.isPublic ?? true,
     });
 
     const data = await review.save();

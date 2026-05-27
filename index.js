@@ -1,15 +1,50 @@
+require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const session = require('express-session');
+const passport = require('passport');
+const GitHubStrategy = require('passport-github').Strategy;
 const app = express();
 
 const swaggerUi = require('swagger-ui-express');
 const swaggerDocument = require('./swagger.json');
 
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((obj, done) => {
+  done(null, obj);
+});
+
+passport.use(
+  new GitHubStrategy(
+    {
+      clientID: process.env.GITHUB_CLIENT_ID || '',
+      clientSecret: process.env.GITHUB_CLIENT_SECRET || '',
+      callbackURL: process.env.GITHUB_CALLBACK_URL || 'http://localhost:8080/auth/github/callback',
+    },
+    (accessToken, refreshToken, profile, done) => {
+      return done(null, profile);
+    }
+  )
+);
+
 app
-  .use(cors())
-  .use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
+  .use(cors({ origin: true, credentials: true }))
   .use(express.json())
   .use(express.urlencoded({ extended: true }))
+  .use(
+    session({
+      secret: process.env.SESSION_SECRET || 'temple-api-secret',
+      resave: false,
+      saveUninitialized: false,
+    })
+  )
+  .use(passport.initialize())
+  .use(passport.session())
+  .use('/auth', require('./routes/auth'))
+  .use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument))
   .use('/', require('./routes'));
 
 const db = require('./models');

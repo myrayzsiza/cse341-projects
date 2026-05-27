@@ -6,8 +6,19 @@ This API implements two collections (`temples` and `reviews`) with full CRUD ope
 
 - Run `npm install`
 - Create a `.env` file with a valid `MONGODB_URI`
+- Add GitHub OAuth values to `.env`:
+  - `GITHUB_CLIENT_ID`
+  - `GITHUB_CLIENT_SECRET`
+  - `GITHUB_CALLBACK_URL=http://localhost:8080/auth/github/callback`
+  - `SESSION_SECRET`
 - Run `npm start`
 - Open `http://localhost:8080/api-docs` to view Swagger UI
+
+## GitHub OAuth
+
+- Authenticate with GitHub at `/auth/github`
+- Check login status at `/auth/status`
+- Logout at `/auth/logout`
 
 ## API collections
 
